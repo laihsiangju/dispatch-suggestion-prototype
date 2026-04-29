@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>派建議 prototype — 3drens TMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+<style>
+:root {
+  /* —— Brand tokens (from TMS Figma DS Foundation) —— */
+  --primary-darkest: #00658F;
+  --primary-dark: #208FBE;
+  --primary: #27AAE1;
+  --primary-light: #56CBFC;
+  --primary-lighter: #BEE5F5;
+  --primary-bg: #CEF1FF;
+  --primary-bg-light: #EAF9FF;
+
+  --success: #21825E;
+  --success-strong: #1F7A59;
+  --success-light: #4ACE6B;
+  --success-bg: #EAF6F1;
+
+  --error: #DE3730;
+  --error-strong: #BA1A1A;
+  --error-bg: #FFEDEA;
+
+  --warning: #E36D0D;
+  --warning-strong: #CC620C;
+  --warning-bg: #FFF0DC;
+
+  --accent-purple: #5856D6;
+
+  /* Greys */
+  --black: #000000;
+  --text-primary: #191C1E;
+  --text-secondary: #454749;
+  --text-tertiary: #5C5F61;
+  --text-disabled: #8F9193;
+  --grey-01: #AAABAE;
+  --grey-02: #C5C6C9;
+  --grey-03: #E1E2E5;
+  --grey-04: #F0F1F3;
+  --grey-05: #FBFCFF;
+  --white: #FFFFFF;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-pill: 100px;
+
+  /* Shadow (Figma 01dp / 02dp / 04dp) */
+  --shadow-1: 0px 1px 3px 0px rgba(0,0,0,.2), 0px 2px 1px 0px rgba(0,0,0,.12), 0px 1px 1px 0px rgba(0,0,0,.14);
+  --shadow-2: 0px 1px 5px 0px rgba(0,0,0,.2), 0px 3px 1px 0px rgba(0,0,0,.12), 0px 2px 2px 0px rgba(0,0,0,.14);
+  --shadow-4: 0px 2px 4px 0px rgba(0,0,0,.2), 0px 1px 10px 0px rgba(0,0,0,.12), 0px 4px 5px 0px rgba(0,0,0,.14);
+
+  /* Typography */
+  --font: "Noto Sans TC", "Noto Sans", "PingFang TC", -apple-system, sans-serif;
+
+  --header-h: 56px;
+  --sidebar-w: 64px;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--grey-04);
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; }
+input { font-family: inherit; }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+  font-size: 20px;
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* —— Header —— */
+.app-header {
+  height: var(--header-h);
+  background: var(--white);
+  border-bottom: 1px solid var(--grey-03);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-4);
+  gap: var(--sp-6);
+  position: sticky; top: 0; z-index: 30;
+}
+.header-burger {
+  background: transparent; border: 0; padding: var(--sp-2);
+  border-radius: var(--r-sm); color: var(--text-primary);
+}
+.header-burger:hover { background: var(--grey-04); }
+.brand {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: 700; font-size: 18px;
+  color: var(--black);
+}
+.brand .brand-mark {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: linear-gradient(135deg, #27AAE1, #00658F);
+}
+.page-title {
+  font-size: 16px; color: var(--text-primary); font-weight: 500;
+}
+.spacer { flex: 1; }
+.renie-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--white);
+  border: 1px solid var(--grey-03);
+  border-radius: var(--r-pill);
+  padding: 6px 14px;
+  color: var(--primary-darkest);
+  font-weight: 600;
+  box-shadow: var(--shadow-1);
+}
+.renie-pill .material-symbols-outlined { color: var(--primary); font-size: 18px; }
+.icon-btn {
+  background: transparent; border: 0; width: 36px; height: 36px;
+  border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+}
+.icon-btn:hover { background: var(--grey-04); }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #191C1E, #454749);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--white); font-weight: 600;
+}
+
+/* —— Layout —— */
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--header-h));
+}
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--grey-03);
+  display: flex; flex-direction: column;
+  align-items: center; padding: var(--sp-3) 0;
+  gap: var(--sp-1);
+}
+.side-item {
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.side-item:hover { background: var(--grey-04); }
+.side-item.active { background: var(--primary-bg-light); color: var(--primary-darkest); }
+
+.main {
+  padding: var(--sp-4) var(--sp-6);
+  display: flex; flex-direction: column;
+  gap: var(--sp-4);
+}
+.toolbar {
+  display: flex; align-items: center; gap: var(--sp-3);
+}
+.toolbar h1 {
+  font-size: 22px; font-weight: 700; color: var(--text-primary);
+  margin: 0; letter-spacing: 0.5px;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 0;
+  font-size: 14px; font-weight: 600;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: var(--white); }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-primary:disabled { background: var(--grey-03); color: var(--grey-01); cursor: not-allowed; }
+.btn-outline {
+  background: var(--white); color: var(--primary-darkest);
+  border: 1px solid var(--primary);
+}
+.btn-outline:hover { background: var(--primary-bg-light); }
+.btn-ghost {
+  background: transparent; color: var(--text-secondary);
+}
+.btn-ghost:hover { background: var(--grey-04); }
+.btn-danger { background: var(--error); color: var(--white); }
+.btn-sm { padding: 4px 12px; font-size: 12px; }
+
+/* —— Two-pane content —— */
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+}
+.pane {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--grey-03);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.pane-header {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--grey-04);
+}
+.pane-title {
+  font-size: 18px; font-weight: 700; color: var(--text-primary);
+}
+.pane-count {
+  font-size: 16px; font-weight: 700; color: var(--text-secondary);
+}
+.pane-actions { margin-left: auto; display: flex; align-items: center; gap: var(--sp-1); }
+
+/* AI tag chips */
+.ai-tags {
+  display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  padding: 0 var(--sp-4) var(--sp-3);
+}
+.ai-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--grey-03);
+  background: var(--white);
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.ai-tag:hover { background: var(--primary-bg-light); border-color: var(--primary-lighter); color: var(--primary-darkest); }
+.ai-tag .material-symbols-outlined { color: var(--primary); font-size: 16px; }
+
+.filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px 6px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--primary);
+  background: var(--primary-bg-light);
+  color: var(--primary-darkest);
+  font-size: 13px; font-weight: 500;
+  margin: 0 var(--sp-4) var(--sp-3);
+}
+.filter-chip .material-symbols-outlined { font-size: 16px; cursor: pointer; }
+
+/* Selection bar (appears when checkboxes selected) */
+.selection-bar {
+  display: none;
+  align-items: center; gap: var(--sp-3);
+  margin: 0 var(--sp-4) var(--sp-3);
+  padding: 8px 14px;
+  background: linear-gradient(90deg, #EAF9FF, #FFFFFF);
+  border: 1px solid var(--primary-lighter);
+  border-radius: var(--r-md);
+}
+.selection-bar.show { display: flex; }
+.selection-bar .count {
+  color: var(--primary-darkest); font-weight: 700;
+}
+
+/* Table */
+.table-wrap { overflow: auto; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  font-weight: 600; color: var(--text-tertiary);
+  background: var(--grey-05);
+  border-bottom: 1px solid var(--grey-03);
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 12px;
+}
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--grey-04);
+  vertical-align: middle;
+}
+tbody tr:hover { background: var(--primary-bg-light); }
+tbody tr.selected { background: var(--primary-bg-light); }
+.order-id-link {
+  color: var(--primary-darkest); font-weight: 500;
+  text-decoration: underline; text-underline-offset: 2px;
+  cursor: pointer;
+}
+.status-pill {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600;
+  background: var(--grey-04); color: var(--text-secondary);
+}
+.status-new { background: var(--primary-bg-light); color: var(--primary-darkest); }
+
+/* Custom checkbox */
+.cb {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border: 2px solid var(--grey-01);
+  border-radius: 3px;
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  transition: background .12s, border-color .12s;
+}
+.cb:hover { border-color: var(--primary); }
+.cb:checked {
+  background: var(--primary); border-color: var(--primary);
+}
+.cb:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px; top: 0px;
+  width: 5px; height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.cb-header {
+  border-color: var(--text-tertiary);
+}
+
+/* Dispatch order cards (right pane) */
+.dispatch-cards {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  max-height: 720px;
+  overflow-y: auto;
+}
+.dispatch-card {
+  border: 1px solid var(--grey-03);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  background: var(--white);
+}
+.dc-row {
+  display: flex; align-items: center; gap: var(--sp-2);
+}
+.dc-id {
+  font-weight: 600; color: var(--text-primary);
+  font-size: 14px;
+}
+.dc-meta {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  margin-top: var(--sp-2);
+  font-size: 12px; color: var(--text-tertiary);
+}
+.dc-meta .it { display: inline-flex; align-items: center; gap: 4px; }
+.dc-meta .it .material-symbols-outlined { font-size: 14px; }
+.dc-tags {
+  display: flex; gap: 8px; margin-top: var(--sp-2); flex-wrap: wrap;
+}
+.dc-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--grey-04);
+  font-size: 12px; color: var(--text-secondary);
+}
+.dc-tag.driver { background: var(--primary-bg-light); color: var(--primary-darkest); }
+.dc-tag .material-symbols-outlined { font-size: 14px; }
+
+/* —— Modal —— */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 100;
+  padding: 32px;
+  animation: fadein .15s ease;
+}
+.modal-backdrop.show { display: flex; }
+@keyframes fadein { from {opacity:0} to {opacity:1} }
+
+.modal {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  width: min(720px, 100%);
+  height: min(720px, 100%);
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-4);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center;
+  padding: 20px 24px; gap: 12px;
+  border-bottom: 1px solid var(--grey-04);
+}
+.modal-header .ai-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #56CBFC, #00658F);
+  color: var(--white);
+}
+.modal-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.modal-subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+
+.modal-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* Order info banner inside single-order modal */
+.order-banner {
+  background: var(--primary-bg-light);
+  border: 1px solid var(--primary-lighter);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.order-banner .ob-row1 {
+  display: flex; align-items: center; gap: 10px;
+}
+.order-banner .ob-id {
+  font-size: 15px; font-weight: 700; color: var(--text-primary);
+}
+.order-banner .ob-zone {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: var(--r-pill);
+  background: var(--white);
+  color: var(--primary-darkest);
+  font-size: 12px; font-weight: 600;
+}
+.order-banner .ob-meta {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  margin-top: 6px;
+  font-size: 12px; color: var(--text-tertiary);
+}
+.order-banner .ob-meta b { color: var(--text-secondary); font-weight: 600; }
+
+/* Left list of selected orders */
+.order-list {
+  border-right: 1px solid var(--grey-04);
+  overflow-y: auto;
+  background: var(--grey-05);
+}
+.order-list-header {
+  padding: 14px 20px;
+  font-size: 12px; font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  background: var(--grey-05);
+  position: sticky; top: 0; z-index: 1;
+  border-bottom: 1px solid var(--grey-04);
+}
+.order-list-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--grey-04);
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--grey-05);
+}
+.order-list-item:hover { background: var(--white); }
+.order-list-item.active {
+  background: var(--white);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+.order-list-item .oli-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.order-list-item .oli-id {
+  font-weight: 600; color: var(--text-primary); font-size: 13px;
+}
+.order-list-item .oli-addr {
+  color: var(--text-tertiary); font-size: 12px;
+}
+.order-list-item .oli-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.oli-status.assigned { color: var(--success-strong); }
+.oli-status.pending  { color: var(--warning-strong); }
+.oli-status .material-symbols-outlined { font-size: 14px; }
+
+/* Right: suggestions for active order */
+.suggestions {
+  overflow-y: auto;
+  padding: 20px 24px;
+  background: var(--white);
+}
+.sugg-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--grey-04);
+  margin-bottom: 14px;
+}
+.sugg-head .info-l { display: flex; flex-direction: column; gap: 4px; }
+.sugg-head .ord-id { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.sugg-head .ord-meta { font-size: 12px; color: var(--text-tertiary); }
+.sugg-head .ord-meta .it { margin-right: 12px; }
+
+.sugg-empty {
+  padding: 40px 24px; text-align: center;
+  color: var(--text-tertiary);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.sugg-empty .material-symbols-outlined { font-size: 40px; color: var(--grey-02); }
+
+.sugg-list {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.sugg-card {
+  border: 1px solid var(--grey-03);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  display: flex; gap: 12px;
+}
+.sugg-card:hover {
+  border-color: var(--primary-lighter);
+  background: var(--primary-bg-light);
+}
+.sugg-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-bg-light);
+  box-shadow: 0 0 0 2px var(--primary-bg) inset;
+}
+
+/* Custom radio */
+.radio {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border: 2px solid var(--grey-01);
+  border-radius: 50%;
+  background: var(--white);
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.radio:hover { border-color: var(--primary); }
+.radio:checked { border-color: var(--primary); }
+.radio:checked::after {
+  content: ""; position: absolute;
+  left: 3px; top: 3px;
+  width: 10px; height: 10px;
+  background: var(--primary); border-radius: 50%;
+}
+
+.sugg-content { flex: 1; min-width: 0; }
+.sugg-row1 {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.sugg-id { font-weight: 600; color: var(--text-primary); }
+.score-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 700;
+}
+.score-high { background: var(--success-bg); color: var(--success-strong); }
+.score-mid  { background: var(--warning-bg); color: var(--warning-strong); }
+.score-low  { background: var(--grey-04); color: var(--text-tertiary); }
+
+.sugg-meta {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  margin-top: 6px;
+  font-size: 12px; color: var(--text-tertiary);
+}
+.sugg-meta .it { display: inline-flex; align-items: center; gap: 4px; }
+.sugg-meta .it .material-symbols-outlined { font-size: 14px; }
+.sugg-meta b { color: var(--text-secondary); font-weight: 600; }
+
+.reasons {
+  margin-top: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.reason {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.reason.ok .material-symbols-outlined { color: var(--success-strong); font-size: 16px; }
+.reason.warn .material-symbols-outlined { color: var(--warning); font-size: 16px; }
+.reason.skip .material-symbols-outlined { color: var(--grey-01); font-size: 16px; }
+.reason.skip { color: var(--grey-01); text-decoration: line-through; }
+
+/* Modal footer */
+.modal-footer {
+  border-top: 1px solid var(--grey-04);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.progress-info {
+  font-size: 13px; color: var(--text-secondary);
+}
+.progress-info b { color: var(--primary-darkest); }
+.modal-footer .grow { flex: 1; }
+
+/* Skip / clear button on row */
+.row-link {
+  background: transparent; border: 0;
+  color: var(--text-tertiary); font-size: 12px;
+  text-decoration: underline; cursor: pointer;
+  padding: 0;
+}
+.row-link:hover { color: var(--primary-darkest); }
+
+/* "NEW" badge for the 派建議 button */
+.new-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--r-pill);
+  background: var(--accent-purple); color: white;
+  margin-left: 4px;
+}
+
+/* Per-row 派建議 button */
+.row-suggest-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--primary);
+  background: var(--white);
+  color: var(--primary-darkest);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .12s;
+}
+.row-suggest-btn:hover { background: var(--primary-bg-light); }
+.row-suggest-btn .material-symbols-outlined {
+  font-size: 14px; color: var(--primary);
+}
+
+/* Hint on top of page (prototype only) */
+.proto-hint {
+  margin: 0 var(--sp-6);
+  padding: 8px 14px;
+  background: #FFF8E1;
+  border: 1px dashed #CC620C;
+  border-radius: var(--r-md);
+  color: #6E3700;
+  font-size: 12px;
+}
+.kbd {
+  background: var(--white); padding: 1px 6px; border-radius: 3px;
+  border: 1px solid var(--grey-03); font-family: monospace; font-size: 11px;
+}
+
+/* Toast (after confirm) */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--text-primary); color: var(--white);
+  padding: 12px 20px; border-radius: var(--r-md);
+  display: none; align-items: center; gap: 8px;
+  box-shadow: var(--shadow-2);
+  z-index: 200;
+  animation: slidein .25s ease;
+}
+.toast.show { display: flex; }
+@keyframes slidein { from {transform: translate(-50%, 30px); opacity: 0} to {transform: translate(-50%, 0); opacity: 1} }
+.toast .material-symbols-outlined { color: var(--success-light); }
+</style>
+</head>
+<body>
+
+<!-- ========== Header ========== -->
+<header class="app-header">
+  <button class="header-burger" aria-label="menu"><span class="material-symbols-outlined">menu</span></button>
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <span>3drens<sup style="font-size:10px;color:#5C5F61;font-weight:500;margin-left:2px">tms</sup></span>
+  </div>
+  <div class="page-title">訂單管理</div>
+  <div class="spacer"></div>
+  <button class="renie-pill"><span class="material-symbols-outlined">auto_awesome</span>Renie.ai</button>
+  <button class="icon-btn" aria-label="lang"><span class="material-symbols-outlined">language</span></button>
+  <div class="avatar">G</div>
+</header>
+
+<div class="proto-hint">
+  Prototype 流程：<b>1.</b> 在「未分類」表格的任一張訂單列尾，點擊「<span class="material-symbols-outlined" style="font-size:14px;color:#5856D6">auto_awesome</span> 派建議」按鈕 → <b>2.</b> Modal 列出該訂單適合的派車單與原因 → <b>3.</b> 選擇一張派車單 → <b>4.</b> 點擊「確認分派」。
+</div>
+
+<!-- ========== Main Layout ========== -->
+<div class="app-shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="side-item"><span class="material-symbols-outlined">person</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">build</span></div>
+    <div class="side-item active"><span class="material-symbols-outlined">description</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">sensors</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">summarize</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">inventory_2</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">table_chart</span></div>
+    <div class="side-item"><span class="material-symbols-outlined">paid</span></div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Top toolbar -->
+    <div class="toolbar">
+      <h1>訂單管理</h1>
+      <div class="spacer"></div>
+      <button class="btn btn-outline">新增單筆</button>
+      <button class="btn btn-primary">匯入並拆單</button>
+      <button class="btn btn-primary">匯入並指派</button>
+      <button class="btn btn-primary">轉檔並匯入</button>
+      <button class="btn btn-primary">批次匯入</button>
+      <button class="icon-btn"><span class="material-symbols-outlined">settings</span></button>
+    </div>
+
+    <!-- Two-pane content -->
+    <div class="panes">
+      <!-- ========== LEFT PANE: 未分類 ========== -->
+      <section class="pane">
+        <div class="pane-header">
+          <div class="pane-title">未分類</div>
+          <div class="pane-count">279</div>
+          <div class="pane-actions">
+            <button class="icon-btn"><span class="material-symbols-outlined">search</span></button>
+            <button class="btn btn-outline btn-sm"><span class="material-symbols-outlined" style="font-size:16px">auto_awesome</span>一鍵分類與優化</button>
+            <button class="btn btn-ghost btn-sm"><span class="material-symbols-outlined" style="font-size:16px;color:#27AAE1">auto_awesome</span>自動分類</button>
+            <button class="icon-btn"><span class="material-symbols-outlined">open_in_full</span></button>
+          </div>
+        </div>
+
+        <!-- AI saved tags -->
+        <div class="ai-tags">
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>送件分區編號</span>
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>台北</span>
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>嘉義上限2單</span>
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>新北</span>
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>2024台北</span>
+          <span class="ai-tag"><span class="material-symbols-outlined">auto_awesome</span>台北+台中</span>
+        </div>
+
+        <!-- Date filter chip -->
+        <div class="filter-chip">
+          訂單建立日期: 2026/04/27-2026/05/03
+          <span class="material-symbols-outlined">refresh</span>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:36px"><input type="checkbox" class="cb cb-header" id="selAll" onclick="toggleAll(this)"></th>
+                <th>原始訂單 ↓</th>
+                <th>任務類型</th>
+                <th>業務類型</th>
+                <th>訂單狀態</th>
+                <th>訂單編號</th>
+                <th>地址</th>
+                <th>送件區</th>
+                <th style="width:120px;text-align:right">操作</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========== RIGHT PANE: 派車單 ========== -->
+      <section class="pane">
+        <div class="pane-header">
+          <div class="pane-title">派車單</div>
+          <div class="pane-count">80</div>
+          <span class="material-symbols-outlined" style="color:var(--text-tertiary);font-size:18px">info</span>
+          <div class="pane-actions">
+            <button class="icon-btn"><span class="material-symbols-outlined">swap_vert</span></button>
+            <button class="icon-btn"><span class="material-symbols-outlined">search</span></button>
+            <button class="btn btn-outline btn-sm">批次進行</button>
+            <button class="btn btn-primary btn-sm">建立</button>
+            <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+            <button class="icon-btn"><span class="material-symbols-outlined">open_in_full</span></button>
+          </div>
+        </div>
+
+        <div class="filter-chip">
+          派車單建立日期: 2026/01/01-2026/04/30
+          <span class="material-symbols-outlined">refresh</span>
+        </div>
+
+        <div class="dispatch-cards" id="dispatchCards"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle">
+    <header class="modal-header">
+      <div class="ai-mark"><span class="material-symbols-outlined">auto_awesome</span></div>
+      <div>
+        <div class="modal-title" id="modalTitle">派建議</div>
+        <div class="modal-subtitle">系統依據送件區、容量、派車單狀態等條件，為每張訂單推薦最適合的派車單。</div>
+      </div>
+      <div class="spacer" style="flex:1"></div>
+      <button class="icon-btn" onclick="closeModal()" aria-label="close">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <section class="suggestions" id="suggestions" style="flex:1"></section>
+    </div>
+
+    <footer class="modal-footer">
+      <div class="progress-info" id="progressInfo">尚未選擇派車單</div>
+      <div class="grow"></div>
+      <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" id="confirmBtn" onclick="confirmAssign()" disabled>
+        <span class="material-symbols-outlined" style="font-size:16px">check</span>
+        確認分派
+      </button>
+    </footer>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="material-symbols-outlined">check_circle</span>
+  <span id="toastMsg">已將訂單分派至派車單</span>
+</div>
+
+<script>
+/* ========== Mock Data ========== */
+const ORDERS = [
+  { id: 'O-1', code: '4000041236', task: '送', biz: '宅配', status: 'New Order', addr: '台中市西區公益路 88 號', zone: '台中市',
+    capacity: 2, volume: 35.6, weight: 12, date: '2026/04/28' },
+  { id: 'O-2', code: '7003331205', task: '送', biz: '常溫', status: 'New Order', addr: '桃園市中壢區中央路 23 號', zone: '桃園市',
+    capacity: 1, volume: 18.4, weight: 6,  date: '2026/04/28' },
+  { id: 'O-3', code: '7003331207', task: '送', biz: '常溫', status: 'New Order', addr: '桃園市平鎮區延平路 102 號', zone: '桃園市',
+    capacity: 3, volume: 52.0, weight: 22, date: '2026/04/28' },
+  { id: 'O-4', code: '7003331212', task: '送', biz: '冷藏', status: 'New Order', addr: '桃園市八德區廣豐路 5 號',   zone: '桃園市',
+    capacity: 2, volume: 28.7, weight: 9,  date: '2026/04/28' },
+  { id: 'O-5', code: '7003341880', task: '送', biz: '宅配', status: 'New Order', addr: '桃園市龜山區文化二路 18 號', zone: '桃園市',
+    capacity: 1, volume: 15.0, weight: 5,  date: '2026/04/28' },
+  { id: 'O-6', code: '7003341898', task: '送', biz: '宅配', status: 'New Order', addr: '桃園市楊梅區瑞坪路 47 號',   zone: '桃園市',
+    capacity: 4, volume: 78.2, weight: 30, date: '2026/04/28' },
+  { id: 'O-7', code: '2604180022', task: '送', biz: '常溫', status: 'New Order', addr: '新竹縣竹北市光明六路 200 號', zone: '新竹縣',
+    capacity: 2, volume: 24.0, weight: 8,  date: '2026/04/28' },
+];
+
+const DISPATCHES = [
+  {
+    id: 'D-1', code: '20260428_09:32:59_tkhfz', driver: 'geniedriver01', date: '2026/04/28',
+    zones: ['桃園市'], capUsed: 0, capMax: 10, volUsed: 0, volMax: 200, wtUsed: 0, wtMax: 80,
+    status: 'available', stops: 0, stopsMax: 1,
+    routePoints: ['桃園市中壢區', '桃園市平鎮區']
+  },
+  {
+    id: 'D-2', code: '20260428_09:34:34_u5bga', driver: 'geniedriver02', date: '2026/04/28',
+    zones: ['桃園市'], capUsed: 6, capMax: 12, volUsed: 226.84, volMax: 400, wtUsed: 45, wtMax: 100,
+    status: 'available', stops: 0, stopsMax: 3,
+    routePoints: ['桃園市八德區', '桃園市龜山區', '桃園市楊梅區']
+  },
+  {
+    id: 'D-3', code: '20260428_09:35:27_z0sjp', driver: 'geniedriver03', date: '2026/04/28',
+    zones: ['桃園市', '新竹縣'], capUsed: 0, capMax: 8, volUsed: 0, volMax: 180, wtUsed: 0, wtMax: 60,
+    status: 'available', stops: 0, stopsMax: 0,
+    routePoints: ['桃園市楊梅區', '新竹縣竹北市']
+  },
+  {
+    id: 'D-4', code: '20260427_16:52:25_空箱_bfskt', driver: 'geniedriver04', date: '2026/04/27',
+    zones: ['台中市'], capUsed: 0, capMax: 6, volUsed: 0, volMax: 150, wtUsed: 0, wtMax: 50,
+    status: 'available', stops: 0, stopsMax: 1,
+    routePoints: ['台中市西區', '台中市北區']
+  },
+  {
+    id: 'D-5', code: '20260427_18:11:09_zone_taipei', driver: 'geniedriver05', date: '2026/04/27',
+    zones: ['台北市'], capUsed: 5, capMax: 12, volUsed: 120, volMax: 400, wtUsed: 32, wtMax: 100,
+    status: 'dispatched', stops: 2, stopsMax: 4,
+    routePoints: ['台北市信義區']
+  },
+];
+
+/* ========== Suggestion Algorithm (hardcoded conditions) ========== */
+function suggestFor(order) {
+  const items = DISPATCHES.map(d => {
+    const reasons = [];
+    let ok = 0;
+
+    // C1: 派車單建立日期 = 訂單建立日期（同一天）
+    if (d.date === order.date) { reasons.push({type:'ok', text:`同一天建立（${d.date}）`}); ok++; }
+    else                       { reasons.push({type:'warn', text:`日期不同（派車單 ${d.date} vs 訂單 ${order.date}）`}); }
+
+    // C2: 派車單目的地區 = 訂單送件區
+    if (d.zones.includes(order.zone)) { reasons.push({type:'ok', text:`送件區相符（${order.zone}）`}); ok++; }
+    else                              { reasons.push({type:'warn', text:`送件區不在路線（${d.zones.join('、')}）`}); }
+
+    // C3: 容量足夠（位數／材積／重量）
+    const capOk = (d.capUsed + order.capacity) <= d.capMax;
+    const volOk = (d.volUsed + order.volume) <= d.volMax;
+    const wtOk  = (d.wtUsed  + order.weight) <= d.wtMax;
+    if (capOk && volOk && wtOk) {
+      reasons.push({type:'ok', text:`容量充足（剩 位數 ${d.capMax-d.capUsed}／材積 ${(d.volMax-d.volUsed).toFixed(1)} cuft／重量 ${d.wtMax-d.wtUsed} kg）`});
+      ok++;
+    } else {
+      const lacks = [];
+      if (!capOk) lacks.push('位數');
+      if (!volOk) lacks.push('材積');
+      if (!wtOk)  lacks.push('重量');
+      reasons.push({type:'warn', text:`容量不足（${lacks.join('、')}超出）`});
+    }
+
+    // C4: 派車單狀態還可加單
+    if (d.status === 'available') { reasons.push({type:'ok', text:'派車單尚未指派出車，可加單'}); ok++; }
+    else                          { reasons.push({type:'warn', text:'派車單已出車，無法加單'}); }
+
+    // C5: 司機路線經過該訂單地址附近
+    const onRoute = d.routePoints.some(p => order.addr.includes(p) || p.split('市')[0] === order.zone.split('市')[0] || p.split('縣')[0] === order.zone.split('縣')[0]);
+    if (onRoute) { reasons.push({type:'ok', text:`路線涵蓋該地址附近（${d.routePoints.find(p => order.addr.includes(p)) || d.routePoints[0]}）`}); ok++; }
+    else         { reasons.push({type:'skip', text:'地址不在司機既有路線'}); }
+
+    return {
+      dispatch: d,
+      score: ok,
+      reasons,
+      eligible: ok >= 3  // 至少符合 3 條才視為候選
+    };
+  });
+
+  // sort by score desc; only keep eligible
+  return items.filter(x => x.eligible).sort((a,b) => b.score - a.score);
+}
+
+/* ========== State ========== */
+let assignedOrderIds = new Set();   // orders that have been moved out of 未分類
+let modalOrderId = null;            // order currently open in modal
+let pickedDispatchId = null;        // dispatch picked in current modal
+
+/* ========== Render: orders table ========== */
+function renderOrders() {
+  const tbody = document.getElementById('ordersBody');
+  const visible = ORDERS.filter(o => !assignedOrderIds.has(o.id));
+  tbody.innerHTML = visible.map(o => `
+    <tr data-id="${o.id}">
+      <td><input type="checkbox" class="cb" data-id="${o.id}"></td>
+      <td>${o.code.slice(0,4)}…</td>
+      <td>${o.task}</td>
+      <td>${o.biz}</td>
+      <td><span class="status-pill status-new">${o.status}</span></td>
+      <td><span class="order-id-link">${o.code}</span></td>
+      <td>${o.addr}</td>
+      <td><b>${o.zone}</b></td>
+      <td style="text-align:right">
+        <button class="row-suggest-btn" onclick="openModal('${o.id}')">
+          <span class="material-symbols-outlined">auto_awesome</span>
+          派建議
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleAll(cb) {
+  document.querySelectorAll('#ordersBody .cb').forEach(c => c.checked = cb.checked);
+}
+
+/* ========== Render: dispatch cards (right pane) ========== */
+function renderDispatches() {
+  const wrap = document.getElementById('dispatchCards');
+  wrap.innerHTML = DISPATCHES.map(d => `
+    <div class="dispatch-card">
+      <div class="dc-row">
+        <span class="material-symbols-outlined" style="font-size:16px;color:var(--text-tertiary)">expand_more</span>
+        <span class="dc-id">${d.code}</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="icon-btn"><span class="material-symbols-outlined" style="font-size:18px">map</span></button>
+      </div>
+      <div class="dc-meta">
+        <span class="it"><span class="material-symbols-outlined">place</span>結束的停靠點 ${d.stops}/${d.stopsMax}</span>
+        <span class="it"><span class="material-symbols-outlined">event</span>派車單建立日期 ${d.date}</span>
+        <span class="it"><span class="material-symbols-outlined">inventory_2</span>總單位數 ${d.capUsed}</span>
+        <span class="it"><span class="material-symbols-outlined">view_in_ar</span>總材積 (cuft) ${d.volUsed}</span>
+        <span class="it"><span class="material-symbols-outlined">scale</span>總重量 (kg) ${d.wtUsed}</span>
+      </div>
+      <div class="dc-tags">
+        <span class="dc-tag driver"><span class="material-symbols-outlined">person</span>${d.driver}</span>
+        <span class="dc-tag"><span class="material-symbols-outlined">event</span>${d.date}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ========== Modal (single order) ========== */
+function openModal(orderId) {
+  modalOrderId = orderId;
+  pickedDispatchId = null;
+  document.getElementById('modal').classList.add('show');
+  renderSuggestions();
+  updateProgress();
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  modalOrderId = null;
+  pickedDispatchId = null;
+}
+
+function renderSuggestions() {
+  const wrap = document.getElementById('suggestions');
+  const order = ORDERS.find(o => o.id === modalOrderId);
+  const suggestions = suggestFor(order);
+
+  let html = `
+    <div class="order-banner">
+      <div class="ob-row1">
+        <span class="ob-id">${order.code}</span>
+        <span class="ob-zone"><span class="material-symbols-outlined" style="font-size:14px">place</span>${order.zone}</span>
+        <span style="color:var(--text-tertiary);font-size:12px">${order.addr}</span>
+      </div>
+      <div class="ob-meta">
+        <span><b>建立日期</b> ${order.date}</span>
+        <span><b>業務類型</b> ${order.biz}</span>
+        <span><b>位數</b> ${order.capacity}</span>
+        <span><b>材積</b> ${order.volume} cuft</span>
+        <span><b>重量</b> ${order.weight} kg</span>
+      </div>
+    </div>
+  `;
+
+  if (suggestions.length === 0) {
+    html += `
+      <div class="sugg-empty">
+        <span class="material-symbols-outlined">sentiment_dissatisfied</span>
+        <div>找不到符合條件的派車單</div>
+        <div style="font-size:12px">建議：手動建立新派車單或調整訂單資訊</div>
+      </div>
+    `;
+  } else {
+    html += `<div class="sugg-list">` + suggestions.map(s => {
+      const d = s.dispatch;
+      const scoreCls = s.score === 5 ? 'score-high' : s.score === 4 ? 'score-mid' : 'score-low';
+      const scoreLabel = s.score === 5 ? '高度推薦' : s.score === 4 ? '推薦' : '可選';
+      const isPicked = pickedDispatchId === d.id;
+      return `
+        <label class="sugg-card ${isPicked?'selected':''}">
+          <input type="radio" class="radio" name="dispatch-pick" ${isPicked?'checked':''}
+                 onchange="pickDispatch('${d.id}')">
+          <div class="sugg-content">
+            <div class="sugg-row1">
+              <span class="sugg-id">${d.code}</span>
+              <span class="score-pill ${scoreCls}">
+                <span class="material-symbols-outlined" style="font-size:12px">${s.score>=4?'star':'star_half'}</span>
+                ${scoreLabel} · ${s.score}/5
+              </span>
+            </div>
+            <div class="sugg-meta">
+              <span class="it"><span class="material-symbols-outlined">person</span>${d.driver}</span>
+              <span class="it"><span class="material-symbols-outlined">event</span>${d.date}</span>
+              <span class="it"><b>位數</b> ${d.capUsed+order.capacity}/${d.capMax}</span>
+              <span class="it"><b>材積</b> ${(d.volUsed+order.volume).toFixed(1)}/${d.volMax}</span>
+              <span class="it"><b>重量</b> ${d.wtUsed+order.weight}/${d.wtMax}</span>
+            </div>
+            <div class="reasons">
+              ${s.reasons.map(r => `
+                <div class="reason ${r.type}">
+                  <span class="material-symbols-outlined">${r.type==='ok'?'check_circle':r.type==='warn'?'error':'remove_circle'}</span>
+                  <span>${r.text}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </label>
+      `;
+    }).join('') + `</div>`;
+  }
+
+  wrap.innerHTML = html;
+}
+
+function pickDispatch(dispatchId) {
+  pickedDispatchId = dispatchId;
+  renderSuggestions();
+  updateProgress();
+}
+
+function updateProgress() {
+  const info = document.getElementById('progressInfo');
+  if (pickedDispatchId) {
+    const d = DISPATCHES.find(x => x.id === pickedDispatchId);
+    info.innerHTML = `將分派至 <b>${d.code}</b>`;
+    document.getElementById('confirmBtn').disabled = false;
+  } else {
+    info.textContent = '尚未選擇派車單';
+    document.getElementById('confirmBtn').disabled = true;
+  }
+}
+
+function confirmAssign() {
+  if (!pickedDispatchId || !modalOrderId) return;
+  const order = ORDERS.find(o => o.id === modalOrderId);
+  const dispatch = DISPATCHES.find(d => d.id === pickedDispatchId);
+  assignedOrderIds.add(modalOrderId);
+
+  // Mutate dispatch totals so right pane reflects the addition
+  dispatch.capUsed += order.capacity;
+  dispatch.volUsed = +(dispatch.volUsed + order.volume).toFixed(2);
+  dispatch.wtUsed += order.weight;
+
+  closeModal();
+
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = `已將訂單 ${order.code} 分派至 ${dispatch.code}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+
+  renderOrders();
+  renderDispatches();
+}
+
+/* Init */
+renderOrders();
+renderDispatches();
+</script>
+</body>
+</html>
