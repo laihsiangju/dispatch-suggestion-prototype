@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>派建議 prototype — 3drens TMS</title>
+<title>分派建議 prototype — 3drens TMS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -625,7 +625,7 @@ tbody tr.selected { background: var(--primary-bg-light); }
 }
 .row-link:hover { color: var(--primary-darkest); }
 
-/* "NEW" badge for the 派建議 button */
+/* "NEW" badge for the 分派建議 button */
 .new-badge {
   display: inline-block;
   font-size: 10px; font-weight: 700;
@@ -635,7 +635,7 @@ tbody tr.selected { background: var(--primary-bg-light); }
   margin-left: 4px;
 }
 
-/* Per-row 派建議 button */
+/* Per-row 分派建議 button */
 .row-suggest-btn {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 4px 10px;
@@ -700,7 +700,7 @@ tbody tr.selected { background: var(--primary-bg-light); }
 </header>
 
 <div class="proto-hint">
-  Prototype 流程：<b>1.</b> 在「未分類」表格的任一張訂單列尾，點擊「<span class="material-symbols-outlined" style="font-size:14px;color:#5856D6">auto_awesome</span> 派建議」按鈕 → <b>2.</b> Modal 列出該訂單適合的派車單與原因 → <b>3.</b> 選擇一張派車單 → <b>4.</b> 點擊「確認分派」。
+  Prototype 流程：<b>1.</b> 在「未分類」表格的任一張訂單列尾，點擊「<span class="material-symbols-outlined" style="font-size:14px;color:#5856D6">auto_awesome</span> 分派建議」按鈕 → <b>2.</b> Modal 列出該訂單適合的派車單與原因 → <b>3.</b> 選擇一張派車單 → <b>4.</b> 點擊「確認分派」。
 </div>
 
 <!-- ========== Main Layout ========== -->
@@ -816,7 +816,7 @@ tbody tr.selected { background: var(--primary-bg-light); }
     <header class="modal-header">
       <div class="ai-mark"><span class="material-symbols-outlined">auto_awesome</span></div>
       <div>
-        <div class="modal-title" id="modalTitle">派建議</div>
+        <div class="modal-title" id="modalTitle">分派建議</div>
         <div class="modal-subtitle">系統依據送件區、容量、派車單狀態等條件，為每張訂單推薦最適合的派車單。</div>
       </div>
       <div class="spacer" style="flex:1"></div>
@@ -971,7 +971,7 @@ function renderOrders() {
       <td style="text-align:right">
         <button class="row-suggest-btn" onclick="openModal('${o.id}')">
           <span class="material-symbols-outlined">auto_awesome</span>
-          派建議
+          分派建議
         </button>
       </td>
     </tr>
